@@ -19,7 +19,7 @@ const router = require('./router.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
-// const dbURI = "mongodb+srv://leh3291_db_user:Lh127712@cluster0.6ypn5xk.mongodb.net/DomoMakerA?appName=Cluster0"
+
 mongoose.connect(dbURI).catch((err) => {
   if (err) {
     console.log('Could not connect to database');
@@ -29,7 +29,7 @@ mongoose.connect(dbURI).catch((err) => {
 
 // i think this is wher i put it?? domomakerC step 6
 const redisClient = redis.createClient({
-  url: process.env.REISCLOUD_URL,
+  url: process.env.REDISCLOUD_URL,
 });
 
 redisClient.on('error', (err) => console.log('Redis Client Error', err));
@@ -37,11 +37,6 @@ redisClient.on('error', (err) => console.log('Redis Client Error', err));
 // i think this is wher i put it??
 // DomoMakerC step 7
 redisClient.connect().then(() => {
-  const app = express();
-
-  app.use(helmet());
-  app.use('/assets', express.static);
-});
 
 const app = express();
 
@@ -77,3 +72,7 @@ app.listen(port, (err) => {
   if (err) { throw err; }
   console.log(`Listening on port ${port}`);
 });
+
+});
+
+
