@@ -1,4 +1,4 @@
-require ('dotenv').config();
+require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 const session = require('express-session');
-const RedisStore = require('connect-redis').RedisStore;
+const { RedisStore } = require('connect-redis');
 const redis = require('redis');
 
 const router = require('./router.js');
@@ -22,6 +22,22 @@ mongoose.connect(dbURI).catch((err) => {
     console.log('Could not connect to database');
     throw err;
   }
+});
+
+// i think this is wher i put it?? domomakerC step 6
+const redisClient = redis.createClient({
+  url: process.env.REISCLOUD_URL,
+});
+
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+
+// i think this is wher i put it??
+// DomoMakerC step 7
+redisClient.connect().then(() => {
+  const app = express();
+
+  app.use(helmet());
+  app.use('/assets', express.static);
 });
 
 const app = express();
@@ -38,6 +54,10 @@ app.use(express.json());
 
 app.use(session({
   key: 'sessionid', // this is the name, by default its connect.sid
+  // domoMakerC step 8
+  store: new RedisStore({
+    client: redisClient,
+  }),
   secret: 'Domo Arigato', // is this a domo thing?
   resave: false,
   saveUninitialized: false,
