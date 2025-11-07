@@ -1,3 +1,4 @@
+// DomoMakerC step 5
 require('dotenv').config();
 
 const path = require('path');
@@ -8,6 +9,8 @@ const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 const session = require('express-session');
+//DomoMakerC step 2
+// const RedisStore = require('connect-redis').RedisStore;
 const { RedisStore } = require('connect-redis');
 const redis = require('redis');
 
